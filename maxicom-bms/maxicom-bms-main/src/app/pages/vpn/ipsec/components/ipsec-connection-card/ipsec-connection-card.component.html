@@ -1,0 +1,76 @@
+<mat-card class="connection-card">
+  <!-- Header -->
+  <div class="card-header">
+    <div class="card-title">
+      <mat-icon>vpn_lock</mat-icon>
+      <h3>{{ connection.name }}</h3>
+    </div>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="edit.emit(connection)">
+        <mat-icon>edit</mat-icon>
+        <span>Edit</span>
+      </button>
+      <button mat-menu-item (click)="delete.emit(connection)">
+        <mat-icon>delete</mat-icon>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </div>
+
+  <!-- Content -->
+  <div class="card-content">
+    <!-- Connection Status Section -->
+    <div class="status-section">
+      <div class="section-label">Connection Status</div>
+      <mat-slide-toggle [checked]="connection.status === 'ESTABLISHED'" [disabled]="true" color="primary"
+                        class="connection-toggle">
+                <span class="toggle-label">
+                    {{
+                    connection.status === 'ESTABLISHED' ? 'Connected' : (connection.status === 'CONNECTING' ?
+                      'Connecting...' : 'Disconnected')
+                  }}
+                </span>
+      </mat-slide-toggle>
+      <div class="status-hint">Use Start/Stop buttons below to control connection</div>
+    </div>
+
+    <!-- Connection Details Grid -->
+    <div class="details-grid">
+      <div class="detail-item">
+        <div class="detail-label">Authentication</div>
+        <mat-chip class="detail-value">{{ connection.auth_method }}</mat-chip>
+      </div>
+
+      <div class="detail-item">
+        <div class="detail-label">Remote Address</div>
+        <div class="detail-value">{{ connection.remote_address || '-' }}</div>
+      </div>
+
+      <div class="detail-item full-width">
+        <div class="detail-label">Traffic Selectors</div>
+        <div class="detail-value traffic">
+          <code>{{ connection.local_traffic_selector || '0.0.0.0/0' }}</code>
+          <mat-icon class="arrow-icon">swap_horiz</mat-icon>
+          <code>{{ connection.remote_traffic_selector || '0.0.0.0/0' }}</code>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="card-actions">
+    <button mat-raised-button color="primary" (click)="start.emit(connection)" [disabled]="isConnected()"
+            matTooltip="Start VPN connection">
+      <mat-icon>play_arrow</mat-icon>
+      Start
+    </button>
+    <button mat-raised-button color="warn" (click)="stop.emit(connection)" [disabled]="!isConnected()"
+            matTooltip="Stop VPN connection">
+      <mat-icon>stop</mat-icon>
+      Stop
+    </button>
+  </div>
+</mat-card>

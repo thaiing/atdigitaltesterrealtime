@@ -1,0 +1,50 @@
+<mat-toolbar class="app-header">
+  <div class="header-left">
+    <button mat-icon-button (click)="onMenuToggle()" class="menu-toggle" matTooltip="Toggle Menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <!-- Back Button -->
+    <button *ngIf="canGoBack" mat-icon-button (click)="goBack()" class="back-button" matTooltip="Quay lại">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <div class="header-title-container">
+      <span class="header-title">ATDigital Tester Real-time</span>
+      <span class="page-title" *ngIf="currentPageTitle">
+        <mat-icon class="breadcrumb-arrow">chevron_right</mat-icon>
+        {{ currentPageTitle }}
+      </span>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <!-- Alerts Button -->
+    <button mat-icon-button (click)="navigateToAlerts()" matTooltip="Active Alerts" class="alert-button"
+      [matBadge]="(activeAlertsCount$ | async) || ''" [matBadgeHidden]="(activeAlertsCount$ | async) === 0"
+      matBadgeColor="warn" matBadgeSize="small">
+      <mat-icon>notifications</mat-icon>
+    </button>
+
+    <!-- User Menu -->
+    <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-button">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+
+    <mat-menu #userMenu="matMenu" xPosition="before">
+      <div class="user-info" *ngIf="currentUser$ | async as user">
+        <div class="user-name">{{ user.fullName }}</div>
+        <div class="user-role">{{ user.role | titlecase }}</div>
+      </div>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="navigateToAccount()">
+        <mat-icon>person</mat-icon>
+        <span>Account Settings</span>
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </div>
+</mat-toolbar>

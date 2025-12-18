@@ -1,0 +1,145 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>Network Configuration</h1>
+  </div>
+
+  <mat-tab-group>
+    <!-- Ethernet Tab -->
+    <mat-tab label="Ethernet">
+      <div class="tab-content">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>lan</mat-icon>
+              WAN 0 (eth0)
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="config-form">
+              <mat-slide-toggle [(ngModel)]="networkConfig.eth0.isDhcp">
+                {{ networkConfig.eth0.isDhcp ? 'DHCP (Automatic)' : 'Static IP' }}
+              </mat-slide-toggle>
+              
+              <div class="ip-fields" *ngIf="!networkConfig.eth0.isDhcp">
+                <mat-form-field appearance="outline">
+                  <mat-label>IP Address</mat-label>
+                  <input matInput [(ngModel)]="networkConfig.eth0.ipAddress" placeholder="192.168.1.100">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Subnet Mask</mat-label>
+                  <input matInput [(ngModel)]="networkConfig.eth0.subnetMask">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Gateway</mat-label>
+                  <input matInput [(ngModel)]="networkConfig.eth0.gateway">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>DNS</mat-label>
+                  <input matInput [(ngModel)]="networkConfig.eth0.dns">
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>lan</mat-icon>
+              WAN 1 (eth1)
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="config-form">
+              <mat-slide-toggle [(ngModel)]="networkConfig.eth1.isDhcp">
+                {{ networkConfig.eth1.isDhcp ? 'DHCP (Automatic)' : 'Static IP' }}
+              </mat-slide-toggle>
+              
+              <div class="ip-fields" *ngIf="!networkConfig.eth1.isDhcp">
+                <mat-form-field appearance="outline">
+                  <mat-label>IP Address</mat-label>
+                  <input matInput [(ngModel)]="networkConfig.eth1.ipAddress">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Subnet Mask</mat-label>
+                  <input matInput [(ngModel)]="networkConfig.eth1.subnetMask">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Gateway</mat-label>
+                  <input matInput [(ngModel)]="networkConfig.eth1.gateway">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>DNS</mat-label>
+                  <input matInput [(ngModel)]="networkConfig.eth1.dns">
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-flat-button color="primary" (click)="saveNetworkConfig()">Save Network Settings</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Modbus Tab -->
+    <mat-tab label="Modbus">
+      <div class="tab-content">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Modbus TCP Server</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="config-form">
+              <mat-slide-toggle [(ngModel)]="modbusConfig.enabled">Enable Modbus Server</mat-slide-toggle>
+              <div class="ip-fields" *ngIf="modbusConfig.enabled">
+                <mat-form-field appearance="outline">
+                  <mat-label>Port</mat-label>
+                  <input matInput type="number" [(ngModel)]="modbusConfig.port">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Slave ID</mat-label>
+                  <input matInput type="number" [(ngModel)]="modbusConfig.slaveId">
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-flat-button color="primary" (click)="saveModbusConfig()">Save Modbus Settings</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- IEC 104 Tab -->
+    <mat-tab label="IEC 104">
+      <div class="tab-content">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>IEC 60870-5-104 Server</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="config-form">
+              <mat-slide-toggle [(ngModel)]="iec104Config.enabled">Enable IEC 104 Server</mat-slide-toggle>
+              <div class="ip-fields" *ngIf="iec104Config.enabled">
+                <mat-form-field appearance="outline">
+                  <mat-label>Port</mat-label>
+                  <input matInput type="number" [(ngModel)]="iec104Config.port">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Common Address</mat-label>
+                  <input matInput type="number" [(ngModel)]="iec104Config.commonAddress">
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-flat-button color="primary" (click)="saveIec104Config()">Save IEC 104 Settings</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+

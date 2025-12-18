@@ -1,0 +1,13 @@
+/* src/app/components/dialogs/site-form/site-form.component.scss */
+.full-width {
+  width: 100%;
+}
+
+/* Thêm khoảng cách giữa các trường */
+mat-form-field {
+  margin-bottom: 12px;
+}
+
+[mat-dialog-content] {
+  padding-top: 20px;
+}

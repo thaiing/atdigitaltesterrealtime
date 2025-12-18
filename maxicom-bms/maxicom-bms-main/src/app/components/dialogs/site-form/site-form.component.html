@@ -1,0 +1,41 @@
+<form [formGroup]="siteForm" (ngSubmit)="onSubmit()">
+  <h1 mat-dialog-title>{{ data ? 'Edit Site' : 'Add Site' }}</h1>
+  <div mat-dialog-content>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Site ID</mat-label>
+      <input
+        matInput
+        formControlName="siteId"
+        placeholder="E.g., S-001"
+        required
+      />
+      <mat-error *ngIf="siteForm.get('siteId')?.hasError('required')">
+        Site ID is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Site Name</mat-label>
+      <input
+        matInput
+        formControlName="siteName"
+        placeholder="E.g., Kho Doson"
+        required
+      />
+      <mat-error *ngIf="siteForm.get('siteName')?.hasError('required')">
+        Site Name is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      [disabled]="siteForm.invalid"
+    >
+      {{ data ? 'Update' : 'Save' }}
+    </button>
+  </div>
+</form>

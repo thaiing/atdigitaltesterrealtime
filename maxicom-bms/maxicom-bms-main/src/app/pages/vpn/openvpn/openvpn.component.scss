@@ -1,0 +1,27 @@
+.openvpn-placeholder {
+    text-align: center;
+    padding: 80px 20px;
+
+    mat-icon {
+        font-size: 80px;
+        width: 80px;
+        height: 80px;
+        color: #ff9800;
+    }
+
+    h2 {
+        margin: 24px 0 16px 0;
+        color: #333;
+    }
+
+    p {
+        color: #666;
+        font-size: 16px;
+
+        &.detail {
+            font-size: 14px;
+            max-width: 500px;
+            margin: 16px auto;
+        }
+    }
+}

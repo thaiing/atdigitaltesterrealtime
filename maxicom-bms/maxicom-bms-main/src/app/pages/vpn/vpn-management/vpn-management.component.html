@@ -1,0 +1,35 @@
+<div class="vpn-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <mat-icon class="header-icon">vpn_key</mat-icon>
+      <div>
+        <h1>VPN Management</h1>
+        <p class="subtitle">Configure and manage VPN connections</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <mat-tab-group class="vpn-tabs" animationDuration="300ms">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">shield</mat-icon>
+        <span>IPsec</span>
+      </ng-template>
+      <ng-template matTabContent>
+        <app-ipsec></app-ipsec>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">lock</mat-icon>
+        <span>OpenVPN</span>
+      </ng-template>
+      <ng-template matTabContent>
+        <app-openvpn></app-openvpn>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

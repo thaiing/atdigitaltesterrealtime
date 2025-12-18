@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Edit Schedule' : 'Create Schedule' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="scheduleForm" class="schedule-form">
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Start Date</mat-label>
+        <input matInput [matDatepicker]="startPicker" formControlName="startDate" required>
+        <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+        <mat-error *ngIf="scheduleForm.get('startDate')?.hasError('required')">
+          Start date is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Start Time</mat-label>
+        <input matInput type="time" formControlName="startTime" required>
+        <mat-error *ngIf="scheduleForm.get('startTime')?.hasError('required')">
+          Start time is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Discharge Current (A)</mat-label>
+      <input matInput type="number" formControlName="ratedCurrent" required>
+      <mat-error *ngIf="scheduleForm.get('ratedCurrent')?.hasError('required')">
+        Discharge current is required
+      </mat-error>
+      <mat-error *ngIf="scheduleForm.get('ratedCurrent')?.hasError('min')">
+        Discharge current must be greater than or equal to 0
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="onSubmit()"
+    [disabled]="scheduleForm.invalid"
+  >
+    {{ isEditMode ? 'Update' : 'Create' }}
+  </button>
+</mat-dialog-actions>
+

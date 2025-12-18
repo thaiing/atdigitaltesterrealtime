@@ -1,0 +1,110 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  
+  h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+  }
+}
+
+.table-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.cameras-table {
+  width: 100%;
+  
+  th {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    background: var(--background-color);
+  }
+}
+
+.camera-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  mat-icon {
+    color: var(--primary-color);
+  }
+  
+  span {
+    font-weight: 500;
+  }
+}
+
+.type-badge {
+  padding: 4px 8px;
+  background: var(--background-color);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+  
+  .model {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+}
+
+code {
+  font-family: 'Monaco', 'Consolas', monospace;
+  font-size: 0.85rem;
+  background: var(--background-color);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.zone-count {
+  color: var(--text-secondary);
+}
+
+.status-chip {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  
+  &.status-connected {
+    background: rgba(67, 160, 71, 0.1);
+    color: var(--success-color);
+  }
+  
+  &.status-alert {
+    background: rgba(251, 140, 0, 0.1);
+    color: var(--warning-color);
+  }
+  
+  &.status-disconnected {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-secondary);
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px;
+  gap: 16px;
+  color: var(--text-secondary);
+}
+
+

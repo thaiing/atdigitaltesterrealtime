@@ -1,0 +1,67 @@
+<h2 mat-dialog-title>{{ data.port ? 'Edit Port' : 'Add Port' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="portForm" class="serial-form">
+    <!-- Port Selection (only for Add mode) -->
+    <mat-form-field *ngIf="!isEditMode && availablePortsForSelection.length > 0" appearance="outline" class="form-field">
+      <mat-label>Select Port</mat-label>
+      <mat-select formControlName="portId" required>
+        <mat-option *ngFor="let port of availablePortsForSelection" [value]="port.id">
+          {{ port.alias }} ({{ port.devicePath }})
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Port Display (only for Edit mode) -->
+    <mat-form-field *ngIf="isEditMode" appearance="outline" class="form-field" disabled>
+      <mat-label>Port</mat-label>
+      <input matInput [value]="data.port?.alias + ' (' + data.port?.port + ')'" readonly>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Baud Rate</mat-label>
+      <mat-select formControlName="baudRate" required>
+        <mat-option *ngFor="let rate of data.baudRates" [value]="rate">
+          {{ rate }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Data Bits</mat-label>
+      <mat-select formControlName="dataBits" required>
+        <mat-option *ngFor="let bits of data.dataBits" [value]="bits">
+          {{ bits }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Parity</mat-label>
+      <mat-select formControlName="parity" required>
+        <mat-option
+          *ngFor="let option of parityDisplayOptions"
+          [value]="option.value"
+        >
+          {{ option.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Stop Bits</mat-label>
+      <mat-select formControlName="stopBits" required>
+        <mat-option *ngFor="let bits of data.stopBits" [value]="bits">
+          {{ bits }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="primary" [mat-dialog-close]="portForm.value" [disabled]="portForm.invalid">
+    Save
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,11 @@
+{
+  "apiUrl": "/api",
+  "wsUrl": "ws://localhost:8080/ws",
+  "refreshInterval": 5000,
+  "defaultLanguage": "en",
+  "temperatureUnit": "C",
+  "alertSoundEnabled": true,
+  "sessionTimeout": 3600
+}
+
+

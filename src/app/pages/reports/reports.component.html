@@ -1,0 +1,138 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>Reports</h1>
+    <div class="header-actions">
+      <button mat-stroked-button (click)="exportExcel()">
+        <mat-icon>table_chart</mat-icon>
+        Export Excel
+      </button>
+      <button mat-flat-button color="primary" (click)="exportPDF()">
+        <mat-icon>picture_as_pdf</mat-icon>
+        Export PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="filters-card">
+    <div class="filters">
+      <mat-form-field appearance="outline">
+        <mat-label>Report Type</mat-label>
+        <mat-select [(ngModel)]="reportType">
+          <mat-option value="temperature">Temperature Report</mat-option>
+          <mat-option value="alerts">Alerts Report</mat-option>
+          <mat-option value="devices">Device Status Report</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Date Range</mat-label>
+        <mat-select [(ngModel)]="dateRange" (selectionChange)="onDateRangeChange()">
+          <mat-option value="day">Last 24 Hours</mat-option>
+          <mat-option value="week">Last 7 Days</mat-option>
+          <mat-option value="month">Last 30 Days</mat-option>
+          <mat-option value="year">Last Year</mat-option>
+          <mat-option value="custom">Custom Range</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="dateRange === 'custom'">
+        <mat-label>Start Date</mat-label>
+        <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate">
+        <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="dateRange === 'custom'">
+        <mat-label>End Date</mat-label>
+        <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate">
+        <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" (click)="generateReport()">
+        <mat-icon>refresh</mat-icon>
+        Generate
+      </button>
+    </div>
+  </mat-card>
+
+  <!-- Chart -->
+  <mat-card class="chart-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>show_chart</mat-icon>
+        Temperature Trend
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="chart-container">
+        <canvas baseChart [data]="chartData" [options]="chartOptions" [type]="chartType"></canvas>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Data Table -->
+  <mat-card class="table-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>table_view</mat-icon>
+        Temperature Statistics by Device
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="table-container" *ngIf="!isLoading">
+        <table mat-table [dataSource]="reportData" class="report-table">
+          <ng-container matColumnDef="device">
+            <th mat-header-cell *matHeaderCellDef>Device</th>
+            <td mat-cell *matCellDef="let row">{{ row.device }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="avgTemp">
+            <th mat-header-cell *matHeaderCellDef>Avg (°C)</th>
+            <td mat-cell *matCellDef="let row">{{ row.avgTemp | number:'1.1-1' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="minTemp">
+            <th mat-header-cell *matHeaderCellDef>Min (°C)</th>
+            <td mat-cell *matCellDef="let row" class="temp-min">{{ row.minTemp | number:'1.1-1' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="maxTemp">
+            <th mat-header-cell *matHeaderCellDef>Max (°C)</th>
+            <td mat-cell *matCellDef="let row" class="temp-max">{{ row.maxTemp | number:'1.1-1' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="readings">
+            <th mat-header-cell *matHeaderCellDef>Readings</th>
+            <td mat-cell *matCellDef="let row">{{ row.readings }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="warnings">
+            <th mat-header-cell *matHeaderCellDef>Warnings</th>
+            <td mat-cell *matCellDef="let row">
+              <span [class.text-warning]="row.warnings > 0">{{ row.warnings }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="criticals">
+            <th mat-header-cell *matHeaderCellDef>Critical</th>
+            <td mat-cell *matCellDef="let row">
+              <span [class.text-danger]="row.criticals > 0">{{ row.criticals }}</span>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+
+      <div class="loading-container" *ngIf="isLoading">
+        <mat-spinner diameter="40"></mat-spinner>
+        <span>Generating report...</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+

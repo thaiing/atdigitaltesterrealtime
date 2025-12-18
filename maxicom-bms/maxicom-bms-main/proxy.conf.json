@@ -1,0 +1,47 @@
+{
+  "/api/thermal-camera": {
+    "target": "http://192.168.127.7:8000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/thermal-camera": ""
+    }
+  },
+  "/api/schedule": {
+    "target": "http://192.168.127.19:8081",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/schedule": "/soh-schedule"
+    }
+  },
+  "/api/latest-value": {
+    "target": "http://192.168.127.19:8081",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/latest-value": "/latest-value"
+    }
+  },
+  "/api/vpn": {
+    "target": "http://192.168.127.19:8888",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/api": {
+    "target": "http://192.168.127.19:8888",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api": "/rest"
+    },
+    "headers": {
+      "Authorization": "Basic YWRtaW46YWRtaW4="
+    }
+  }
+}

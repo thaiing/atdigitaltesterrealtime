@@ -1,0 +1,18 @@
+.serial-form {
+  display: grid;
+  // Hiển thị 2 cột
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding-top: 16px;
+}
+
+.form-field {
+  width: 100%;
+}
+
+// Responsive cho màn hình nhỏ
+@media (max-width: 500px) {
+  .serial-form {
+    grid-template-columns: 1fr;
+  }
+}

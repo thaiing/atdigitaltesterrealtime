@@ -1,0 +1,38 @@
+.page-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;
+  h1 { margin: 0; font-size: 1.75rem; font-weight: 600; }
+}
+
+.tab-content {
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+mat-card-header {
+  margin-bottom: 16px;
+  mat-card-title {
+    display: flex; align-items: center; gap: 8px; font-size: 1rem;
+    mat-icon { color: var(--primary-color); }
+  }
+}
+
+.config-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ip-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+mat-card-actions {
+  padding: 16px;
+}
+
+

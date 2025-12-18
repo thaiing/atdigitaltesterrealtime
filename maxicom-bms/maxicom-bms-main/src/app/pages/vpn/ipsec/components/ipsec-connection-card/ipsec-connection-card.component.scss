@@ -1,0 +1,200 @@
+.connection-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+  }
+
+  // Header
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-bottom: 1px solid #e5e7eb;
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      mat-icon {
+        color: #667eea;
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+      }
+
+      h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #1f2937;
+      }
+    }
+
+    button {
+      opacity: 0.6;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  // Content
+  .card-content {
+    padding: 24px;
+
+    // Status Section
+    .status-section {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      border-left: 4px solid #667eea;
+
+      .section-label {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #6b7280;
+        margin-bottom: 12px;
+      }
+
+      .connection-toggle {
+        ::ng-deep {
+          .mdc-label {
+            font-size: 15px;
+            font-weight: 500;
+            color: #1f2937;
+          }
+        }
+      }
+
+      .status-hint {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #9ca3af;
+        font-style: italic;
+      }
+    }
+
+    // Details Grid
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+
+      .detail-item {
+        .detail-label {
+          font-size: 12px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          color: #9ca3af;
+          margin-bottom: 8px;
+        }
+
+        .detail-value {
+          font-size: 14px;
+          color: #1f2937;
+          font-weight: 500;
+
+          &.traffic {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+
+            code {
+              background: #f3f4f6;
+              padding: 6px 10px;
+              border-radius: 6px;
+              font-size: 12px;
+              font-family: 'Courier New', monospace;
+              color: #374151;
+              border: 1px solid #e5e7eb;
+            }
+
+            .arrow-icon {
+              font-size: 18px;
+              width: 18px;
+              height: 18px;
+              color: #9ca3af;
+            }
+          }
+
+          mat-chip {
+            height: 28px;
+            font-size: 13px;
+            font-weight: 500;
+          }
+        }
+
+        &.full-width {
+          grid-column: 1 / -1;
+        }
+      }
+    }
+  }
+
+  // Actions
+  .card-actions {
+    display: flex;
+    gap: 12px;
+    padding: 20px 24px;
+    background: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+
+    button {
+      flex: 1;
+      height: 42px;
+      font-size: 14px;
+      font-weight: 600;
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        margin-right: 6px;
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .connection-card {
+    .card-header {
+      padding: 16px 20px;
+
+      .card-title h3 {
+        font-size: 16px;
+      }
+    }
+
+    .card-content {
+      padding: 20px;
+
+      .details-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+
+    .card-actions {
+      padding: 16px 20px;
+
+      button {
+        font-size: 13px;
+      }
+    }
+  }
+}

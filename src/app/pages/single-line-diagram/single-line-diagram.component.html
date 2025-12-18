@@ -1,0 +1,73 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>Single Line Diagram</h1>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot normal"></span>Normal</div>
+      <div class="legend-item"><span class="legend-dot warning"></span>Warning</div>
+      <div class="legend-item"><span class="legend-dot critical"></span>Critical</div>
+    </div>
+  </div>
+
+  <div class="diagram-container">
+    <mat-card class="diagram-card">
+      <div class="diagram-canvas">
+        <!-- Connection Lines -->
+        <svg class="connections" width="100%" height="100%">
+          <line x1="140" y1="200" x2="140" y2="280" stroke="#666" stroke-width="3"/>
+          <line x1="340" y1="200" x2="340" y2="280" stroke="#666" stroke-width="3"/>
+          <line x1="150" y1="300" x2="150" y2="350" stroke="#666" stroke-width="2"/>
+          <line x1="350" y1="300" x2="350" y2="350" stroke="#666" stroke-width="2"/>
+        </svg>
+
+        <!-- Devices -->
+        <div 
+          *ngFor="let device of devices"
+          class="diagram-device"
+          [class]="'device-' + device.type"
+          [class.selected]="selectedDevice?.id === device.id"
+          [ngClass]="getStatusClass(device.status)"
+          [ngStyle]="getDeviceStyle(device)"
+          (click)="selectDevice(device)"
+          [matTooltip]="device.name"
+        >
+          <div class="device-symbol">
+            <ng-container [ngSwitch]="device.type">
+              <mat-icon *ngSwitchCase="'transformer'">electrical_services</mat-icon>
+              <mat-icon *ngSwitchCase="'breaker'">toggle_on</mat-icon>
+              <mat-icon *ngSwitchCase="'load'">power</mat-icon>
+              <span *ngSwitchCase="'busbar'" class="busbar-line"></span>
+            </ng-container>
+          </div>
+          <div class="device-temp" *ngIf="device.temperature">{{ device.temperature | number:'1.0-0' }}°C</div>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- Details Panel -->
+    <mat-card class="details-panel" *ngIf="selectedDevice">
+      <mat-card-header>
+        <mat-card-title>{{ selectedDevice.name }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="detail-row">
+          <span class="label">Type</span>
+          <span class="value">{{ selectedDevice.type | titlecase }}</span>
+        </div>
+        <div class="detail-row" *ngIf="selectedDevice.temperature">
+          <span class="label">Temperature</span>
+          <span class="value temp" [class]="getStatusClass(selectedDevice.status)">
+            {{ selectedDevice.temperature | number:'1.1-1' }}°C
+          </span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Status</span>
+          <span class="value status-badge" [class]="getStatusClass(selectedDevice.status)">
+            {{ selectedDevice.status | titlecase }}
+          </span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+

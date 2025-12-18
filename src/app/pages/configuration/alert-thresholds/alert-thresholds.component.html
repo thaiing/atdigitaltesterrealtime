@@ -1,0 +1,80 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>Alert Thresholds</h1>
+    <button mat-flat-button color="primary" (click)="addThreshold()">
+      <mat-icon>add</mat-icon>
+      Add Threshold
+    </button>
+  </div>
+
+  <mat-card class="table-card">
+    <div class="table-container" *ngIf="!isLoading">
+      <table mat-table [dataSource]="thresholds" class="thresholds-table">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let t">
+            <div class="threshold-name">
+              <span>{{ t.name }}</span>
+              <span class="description" *ngIf="t.description">{{ t.description }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="condition">
+          <th mat-header-cell *matHeaderCellDef>Condition</th>
+          <td mat-cell *matCellDef="let t">
+            <code>{{ getConditionText(t) }}</code>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="severity">
+          <th mat-header-cell *matHeaderCellDef>Severity</th>
+          <td mat-cell *matCellDef="let t">
+            <span class="severity-badge" [class]="getSeverityClass(t.severity)">
+              {{ t.severity | titlecase }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="notifications">
+          <th mat-header-cell *matHeaderCellDef>Notifications</th>
+          <td mat-cell *matCellDef="let t">
+            <div class="notification-icons">
+              <mat-icon *ngIf="t.notifyEmail" matTooltip="Email">email</mat-icon>
+              <mat-icon *ngIf="t.notifySms" matTooltip="SMS">sms</mat-icon>
+              <mat-icon *ngIf="t.notifySound" matTooltip="Sound">volume_up</mat-icon>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="enabled">
+          <th mat-header-cell *matHeaderCellDef>Enabled</th>
+          <td mat-cell *matCellDef="let t">
+            <mat-slide-toggle [checked]="t.enabled" (change)="toggleThreshold(t)"></mat-slide-toggle>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let t">
+            <button mat-icon-button matTooltip="Edit" (click)="editThreshold(t)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Delete" color="warn" (click)="deleteThreshold(t)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <div class="loading-container" *ngIf="isLoading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  </mat-card>
+</div>
+
+

@@ -1,0 +1,96 @@
+<div class="network-container">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <mat-icon class="title-icon">wifi</mat-icon>
+        Network Communication
+      </h1>
+      <p class="page-subtitle">
+        Configure Ethernet network ports (WAN 0, WAN 1)
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-spinner></mat-spinner>
+    <p>Loading Network configuration...</p>
+  </div>
+
+  <div *ngIf="!isLoading" class="content-grid">
+    <mat-card
+      *ngFor="let config of networkConfigs"
+      class="config-card mat-elevation-z4"
+    >
+      <form
+        *ngIf="networkForms[config.id]"
+        [formGroup]="networkForms[config.id]"
+      >
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>settings_ethernet</mat-icon>
+            {{ config.name }}
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content class="config-form">
+          <div class="dhcp-toggle">
+            <mat-slide-toggle formControlName="dhcp">
+              <span class="toggle-label">
+                <mat-icon>autorenew</mat-icon>
+                Auto (DHCP)
+              </span>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>IP Address</mat-label>
+              <input matInput formControlName="ipAddress" placeholder=" ">
+              <mat-icon matSuffix>location_on</mat-icon>
+              <mat-error *ngIf="networkForms[config.id].get('ipAddress')?.errors?.['pattern']">
+                Invalid IP format
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Subnet Mask</mat-label>
+              <input matInput formControlName="subnetMask" placeholder=" ">
+              <mat-icon matSuffix>mask</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Gateway</mat-label>
+              <input matInput formControlName="gateway" placeholder=" ">
+              <mat-icon matSuffix>router</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>DNS Servers</mat-label>
+              <input matInput formControlName="dns" placeholder="8.8.8.8,1.1.1.1">
+              <mat-icon matSuffix>dns</mat-icon>
+              <mat-hint>Separate multiple DNS servers with commas</mat-hint>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="onSave(config.id)"
+            [disabled]="networkForms[config.id].invalid || networkForms[config.id].pristine"
+          >
+            <mat-icon>save</mat-icon>
+            Save
+          </button>
+        </mat-card-actions>
+      </form>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Edit String' : 'Add String' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="stringForm" class="string-form">
+    <mat-form-field appearance="outline">
+      <mat-label>String Name</mat-label>
+      <input matInput formControlName="stringName" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Cell Brand</mat-label>
+      <input matInput formControlName="cellBrand">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Cell Model</mat-label>
+      <input matInput formControlName="cellModel">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Cell Qty</mat-label>
+      <input matInput type="number" formControlName="cellQty" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Rated Capacity (Ah)</mat-label>
+      <input matInput type="number" formControlName="ratedCapacity" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Rated Voltage (V)</mat-label>
+      <input matInput type="number" formControlName="nominalVoltage" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field-full">
+      <mat-label>Serial Port</mat-label>
+      <mat-select formControlName="serialPortId" required>
+        <mat-option *ngIf="serialPorts.length === 0" [disabled]="true">
+          No Serial Port found, please configure one!
+        </mat-option>
+        <mat-option *ngFor="let port of serialPorts" [value]="port.id">
+          {{ port.alias }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="onSave()"
+    [disabled]="stringForm.invalid"
+  >
+    Save
+  </button>
+</mat-dialog-actions>

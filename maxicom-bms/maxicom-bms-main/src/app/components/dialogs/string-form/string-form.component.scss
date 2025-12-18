@@ -1,0 +1,21 @@
+// src/app/components/dialogs/string-form/string-form.component.scss
+
+.string-form {
+  display: grid;
+  // 2 cột
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding-top: 16px;
+}
+
+.form-field-full {
+  // Cho phép 1 trường kéo dài 2 cột
+  grid-column: 1 / -1;
+}
+
+// Responsive cho màn hình nhỏ
+@media (max-width: 500px) {
+  .string-form {
+    grid-template-columns: 1fr;
+  }
+}

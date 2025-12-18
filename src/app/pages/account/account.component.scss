@@ -1,0 +1,99 @@
+.page-header {
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+  }
+}
+
+.account-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+mat-card-header {
+  margin-bottom: 20px;
+
+  mat-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+
+    mat-icon {
+      color: var(--primary-color);
+    }
+  }
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.avatar {
+  display: flex;
+  justify-content: center;
+
+  mat-icon {
+    font-size: 80px;
+    width: 80px;
+    height: 80px;
+    color: var(--primary-color);
+  }
+}
+
+.info-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+
+  .label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .value {
+    font-weight: 500;
+
+    code {
+      font-family: monospace;
+      background: var(--background-color);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+  }
+
+  .role-badge {
+    padding: 2px 8px;
+    background: rgba(103, 58, 183, 0.1);
+    color: #673ab7;
+    border-radius: 8px;
+    font-size: 0.85rem;
+  }
+}
+
+.password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  mat-divider {
+    margin: 8px 0;
+  }
+
+  button[type="submit"] {
+    margin-top: 8px;
+  }
+}

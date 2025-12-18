@@ -1,0 +1,69 @@
+<div class="ipsec-container">
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading connections...</p>
+  </div>
+
+  <!-- Site-to-Site Section -->
+  <div class="connection-section" *ngIf="!loading">
+    <div class="section-header">
+      <div>
+        <h2>Site-to-Site Connections</h2>
+        <p>Connect office networks securely</p>
+      </div>
+      <button mat-raised-button color="primary" (click)="addConnection('site-to-site')">
+        <mat-icon>add</mat-icon>
+        Add Connection
+      </button>
+    </div>
+
+    <div class="connections-grid">
+      <app-ipsec-connection-card *ngFor="let conn of siteToSiteConnections" [connection]="conn"
+                                 (edit)="editConnection($event)" (delete)="deleteConnection($event)"
+                                 (start)="startConnection($event)"
+                                 (stop)="stopConnection($event)">
+      </app-ipsec-connection-card>
+
+      <div *ngIf="siteToSiteConnections.length === 0" class="empty-state">
+        <mat-icon>cloud_off</mat-icon>
+        <p>No site-to-site connections</p>
+        <button mat-raised-button color="primary" (click)="addConnection('site-to-site')">
+          <mat-icon>add</mat-icon>
+          Create your first connection
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Remote Access Section -->
+  <div class="connection-section" *ngIf="!loading">
+    <div class="section-header">
+      <div>
+        <h2>Remote Access Connections</h2>
+        <p>Allow remote users to connect</p>
+      </div>
+      <button mat-raised-button color="primary" (click)="addConnection('remote-access')">
+        <mat-icon>add</mat-icon>
+        Add Connection
+      </button>
+    </div>
+
+    <div class="connections-grid">
+      <app-ipsec-connection-card *ngFor="let conn of remoteAccessConnections" [connection]="conn"
+                                 (edit)="editConnection($event)" (delete)="deleteConnection($event)"
+                                 (start)="startConnection($event)"
+                                 (stop)="stopConnection($event)">
+      </app-ipsec-connection-card>
+
+      <div *ngIf="remoteAccessConnections.length === 0" class="empty-state">
+        <mat-icon>person_off</mat-icon>
+        <p>No remote access connections</p>
+        <button mat-raised-button color="primary" (click)="addConnection('remote-access')">
+          <mat-icon>add</mat-icon>
+          Create your first connection
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

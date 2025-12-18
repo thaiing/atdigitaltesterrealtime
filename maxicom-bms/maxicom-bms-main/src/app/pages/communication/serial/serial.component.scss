@@ -1,0 +1,87 @@
+// src/app/pages/communication/serial/serial.component.scss
+
+.serial-container {
+  min-height: calc(100vh - var(--header-height) - 48px);
+  animation: fadeIn 0.5s ease-in;
+}
+
+.page-header {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; // Cho phép xuống dòng
+  gap: 16px;
+
+  .header-content {
+    .page-title {
+      margin: 0 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--primary-color);
+      font-size: 1.8rem;
+      font-weight: 500;
+
+      .title-icon {
+        font-size: 2rem;
+        color: var(--accent-color);
+      }
+    }
+
+    .page-subtitle {
+      margin: 0;
+      color: #666;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  gap: 16px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.table-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden; // Để bo góc table
+}
+
+.table-container {
+  overflow-x: auto; // Cho phép cuộn ngang trên mobile
+}
+
+// Căn chỉnh lại các ô trong bảng
+th.mat-header-cell,
+td.mat-cell {
+  padding: 12px 16px;
+}
+
+// Style for device path
+.device-path {
+  background-color: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+// Animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

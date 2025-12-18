@@ -1,0 +1,15 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install dependencies
+RUN pip install --no-cache-dir flask flask-cors requests
+
+# Copy API script
+COPY thermal_camera_api.py .
+
+# Expose port
+EXPOSE 5001
+
+# Run the API
+CMD ["python", "thermal_camera_api.py"]

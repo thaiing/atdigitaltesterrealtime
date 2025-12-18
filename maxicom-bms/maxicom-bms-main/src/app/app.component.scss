@@ -1,0 +1,64 @@
+// src/app/app.component.scss
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+
+  &.mobile {
+    .main-container {
+      .main-content {
+        margin-left: 0 !important;
+      }
+    }
+  }
+}
+
+.main-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+
+  .main-content {
+    flex: 1;
+    margin-left: 280px; // Sidebar width
+    transition: margin-left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #f8fafc;
+
+    // Responsive design
+    @media (max-width: 1024px) {
+      margin-left: 0;
+    }
+  }
+}
+
+.sidebar-collapsed {
+  .main-content {
+    margin-left: 0 !important;
+  }
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+// Smooth animations
+* {
+  transition: margin 0.3s ease, transform 0.3s ease;
+}

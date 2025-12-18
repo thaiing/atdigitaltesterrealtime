@@ -1,0 +1,54 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  h1 { margin: 0; font-size: 1.75rem; font-weight: 600; }
+}
+
+.table-card { padding: 0; overflow: hidden; }
+.table-container { overflow-x: auto; }
+.thresholds-table {
+  width: 100%;
+  th { font-weight: 600; color: var(--text-secondary); font-size: 0.85rem; background: var(--background-color); }
+}
+
+.threshold-name {
+  display: flex;
+  flex-direction: column;
+  span:first-child { font-weight: 500; }
+  .description { font-size: 0.8rem; color: var(--text-secondary); }
+}
+
+code {
+  font-family: 'Monaco', monospace;
+  font-size: 0.85rem;
+  background: var(--background-color);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.severity-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  &.severity-critical { background: rgba(229, 57, 53, 0.1); color: var(--danger-color); }
+  &.severity-warning { background: rgba(251, 140, 0, 0.1); color: var(--warning-color); }
+  &.severity-info { background: rgba(3, 155, 229, 0.1); color: var(--info-color); }
+}
+
+.notification-icons {
+  display: flex;
+  gap: 8px;
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: var(--text-secondary); }
+}
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px;
+}
+
+

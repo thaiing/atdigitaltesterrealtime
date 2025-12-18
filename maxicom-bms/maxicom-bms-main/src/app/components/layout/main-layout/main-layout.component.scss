@@ -1,0 +1,22 @@
+/* src/app/components/layout/main-layout/main-layout.component.scss */
+.app-container {
+  height: 100vh;
+  width: 100vw;
+}
+
+.app-sidenav {
+  width: 240px;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.app-sidenav-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 24px;
+  overflow-y: auto; /* Cho phép cuộn nội dung nếu quá dài */
+}

@@ -1,0 +1,137 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="header-left">
+      <button mat-icon-button (click)="goBack()" aria-label="Go back">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div *ngIf="!isLoading && stringDetail">
+        <h1 class="page-title">{{ stringDetail.stringName }}</h1>
+        <h2 class="page-subtitle">{{ stringDetail.siteName }}</h2>
+      </div>
+    </div>
+    <div class="header-right">
+      <mat-chip-set aria-label="String status">
+        <mat-chip
+          *ngIf="!isLoading && stringDetail"
+          class="status-chip"
+          [ngClass]="stringDetail.status.toLowerCase()"
+          selected
+        >{{ stringDetail.status }}
+        </mat-chip
+        >
+      </mat-chip-set>
+      <button mat-stroked-button (click)="refreshData()" [disabled]="isLoading">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading; else detailContent" class="loading-spinner">
+    <mat-spinner></mat-spinner>
+    <p>Loading monitoring data...</p>
+  </div>
+
+  <ng-template #detailContent>
+    <div *ngIf="stringDetail; else noData">
+      <div class="summary-grid">
+        <mat-card class="summary-card">
+          <mat-card-header>
+            <mat-card-title>Tổng quan</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="card-value">{{ stringDetail.totalVoltage.toFixed(2) }} V</p>
+            <p class="card-label">Tổng điện áp</p>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="summary-card">
+          <mat-card-header>
+            <mat-card-title>Dòng</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="card-value">{{ stringDetail.current.toFixed(1) }} A</p>
+            <p class="card-label">
+              {{ stringDetail.status }}
+            </p>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="summary-card">
+          <mat-card-header>
+            <mat-card-title>Nhiệt độ TB</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="card-value">{{ stringDetail.avgTemperature.toFixed(1) }} °C</p>
+            <p class="card-label">Nhiệt độ trung bình</p>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="summary-card">
+          <mat-card-header>
+            <mat-card-title>SOC / SOH</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="card-value">{{ stringDetail.soc }}% / {{ stringDetail.soh }}%</p>
+            <p class="card-label">State of Charge / Health</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <mat-card class="cell-grid-card mat-elevation-z4">
+        <mat-card-header>
+          <mat-card-title>
+            Cell Monitoring Grid ({{ stringDetail.cells.length }} cells)
+          </mat-card-title>
+          <div class="card-actions">
+            <button mat-stroked-button (click)="exportData('voltage')">
+              <mat-icon>download</mat-icon>
+              Export PDF (Vol)
+            </button>
+            <button mat-stroked-button (click)="exportData('temperature')">
+              <mat-icon>download</mat-icon>
+              Export PDF (Temp)
+            </button>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-grid-list [cols]="8" rowHeight="100px" gutterSize="12px">
+            <mat-grid-tile
+              *ngFor="let cell of stringDetail.cells"
+              class="cell-tile"
+              [ngClass]="getCellStatusClass(cell)"
+              [matTooltip]="getCellTooltip(cell)"
+            >
+              <div class="cell-content">
+                <div class="cell-header">
+                  <span class="cell-number">Cell {{ cell.cellNumber }}</span>
+                </div>
+                <div class="cell-body">
+                  <span class="cell-voltage">{{ cell.voltage.toFixed(3) }} V</span>
+                  <mat-progress-bar
+                    mode="determinate"
+                    [value]="getVoltagePercentage(cell.voltage)"
+                  ></mat-progress-bar>
+                  <span
+                    class="cell-temp"
+                    [ngClass]="getTemperatureClass(cell.temperature)"
+                  >
+                    {{ cell.temperature.toFixed(1) }} °C
+                  </span>
+                </div>
+              </div>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <ng-template #noData>
+      <mat-card>
+        <mat-card-content>
+          <p class="error-message">
+            <mat-icon>error_outline</mat-icon>
+            Could not find monitoring data for string ID: {{ stringId }}
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </ng-template>
+  </ng-template>
+</div>

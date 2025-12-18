@@ -1,0 +1,132 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  
+  h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+  }
+}
+
+.filter-card {
+  margin-bottom: 20px;
+  padding: 16px;
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  
+  .search-field {
+    flex: 1;
+    min-width: 250px;
+  }
+  
+  mat-form-field {
+    min-width: 150px;
+  }
+}
+
+.table-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.history-table {
+  width: 100%;
+  
+  th {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    background: var(--background-color);
+  }
+}
+
+.severity-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+  
+  &.severity-critical {
+    background: rgba(229, 57, 53, 0.1);
+    color: var(--danger-color);
+  }
+  
+  &.severity-warning {
+    background: rgba(251, 140, 0, 0.1);
+    color: var(--warning-color);
+  }
+  
+  &.severity-info {
+    background: rgba(3, 155, 229, 0.1);
+    color: var(--info-color);
+  }
+}
+
+.alert-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  
+  .alert-title {
+    font-weight: 500;
+  }
+  
+  .alert-type {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+}
+
+.status-chip {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  
+  &.status-acknowledged {
+    background: rgba(251, 140, 0, 0.1);
+    color: var(--warning-color);
+  }
+  
+  &.status-resolved {
+    background: rgba(67, 160, 71, 0.1);
+    color: var(--success-color);
+  }
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px;
+  gap: 16px;
+  color: var(--text-secondary);
+}
+
+

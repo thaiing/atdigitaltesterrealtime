@@ -1,0 +1,76 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Edit' : 'Create' }} IPsec Connection</h2>
+
+<mat-dialog-content>
+    <form [formGroup]="form">
+        <!-- Name -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Connection Name</mat-label>
+            <input matInput formControlName="name" [readonly]="isEditMode" required>
+            <mat-error *ngIf="form.get('name')?.hasError('required')">Name is required</mat-error>
+        </mat-form-field>
+
+        <!-- Category -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+                <mat-option value="site-to-site">Site-to-Site</mat-option>
+                <mat-option value="remote-access">Remote Access</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!-- Auth Method -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Authentication Method</mat-label>
+            <mat-select formControlName="auth_method" required>
+                <mat-option value="ikev2-psk">IKEv2 PSK</mat-option>
+                <mat-option value="ikev2-cert">IKEv2 Certificate</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!-- Remote Address -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Remote Address</mat-label>
+            <input matInput formControlName="remote_address" placeholder="10.0.0.1" required>
+            <mat-error *ngIf="form.get('remote_address')?.hasError('required')">Remote address is required</mat-error>
+        </mat-form-field>
+
+        <!-- PSK (only for PSK auth) -->
+        <mat-form-field appearance="outline" class="full-width" *ngIf="form.get('auth_method')?.value === 'ikev2-psk'">
+            <mat-label>Pre-Shared Key</mat-label>
+            <input matInput formControlName="pre_shared_key" type="password" [required]="!isEditMode">
+            <mat-error *ngIf="form.get('pre_shared_key')?.hasError('required')">PSK is required</mat-error>
+        </mat-form-field>
+
+        <!-- Local Identity -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Local Identity (optional)</mat-label>
+            <input matInput formControlName="local_identity" placeholder="local.example.com">
+        </mat-form-field>
+
+        <!-- Remote Identity -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Remote Identity (optional)</mat-label>
+            <input matInput formControlName="remote_identity" placeholder="remote.example.com">
+        </mat-form-field>
+
+        <!-- Traffic Selectors -->
+        <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Local Traffic Selector</mat-label>
+                <input matInput formControlName="local_traffic_selector" placeholder="192.168.1.0/24">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Remote Traffic Selector</mat-label>
+                <input matInput formControlName="remote_traffic_selector" placeholder="10.0.0.0/24">
+            </mat-form-field>
+        </div>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid">
+        {{ isEditMode ? 'Update' : 'Create' }}
+    </button>
+</mat-dialog-actions>

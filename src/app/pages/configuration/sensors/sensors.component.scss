@@ -1,0 +1,73 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  
+  h1 { margin: 0; font-size: 1.75rem; font-weight: 600; }
+}
+
+.table-card { padding: 0; overflow: hidden; }
+.table-container { overflow-x: auto; }
+
+.sensors-table {
+  width: 100%;
+  
+  th {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    background: var(--background-color);
+  }
+}
+
+.sensor-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  mat-icon { color: var(--accent-color); }
+  span { font-weight: 500; }
+}
+
+.type-badge {
+  padding: 4px 8px;
+  background: var(--background-color);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+code {
+  font-family: 'Monaco', 'Consolas', monospace;
+  font-size: 0.8rem;
+  background: var(--background-color);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.temp-value { font-weight: 600; color: var(--primary-color); }
+.text-secondary { color: var(--text-secondary); }
+
+.status-chip {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  
+  &.status-connected { background: rgba(67, 160, 71, 0.1); color: var(--success-color); }
+  &.status-alert { background: rgba(251, 140, 0, 0.1); color: var(--warning-color); }
+  &.status-disconnected { background: rgba(0, 0, 0, 0.05); color: var(--text-secondary); }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px;
+  gap: 16px;
+  color: var(--text-secondary);
+}
+
+

@@ -1,0 +1,97 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>Thermal Cameras</h1>
+    <button mat-flat-button color="primary" (click)="addCamera()">
+      <mat-icon>add</mat-icon>
+      Add Camera
+    </button>
+  </div>
+
+  <mat-card class="table-card">
+    <div class="table-container" *ngIf="!isLoading">
+      <table mat-table [dataSource]="cameras" class="cameras-table">
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let camera">
+            <div class="camera-name">
+              <mat-icon>videocam</mat-icon>
+              <span>{{ camera.name }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Type Column -->
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let camera">
+            <span class="type-badge">{{ camera.type }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Brand Column -->
+        <ng-container matColumnDef="brand">
+          <th mat-header-cell *matHeaderCellDef>Brand / Model</th>
+          <td mat-cell *matCellDef="let camera">
+            <div class="brand-info">
+              <span>{{ camera.brand }}</span>
+              <span class="model">{{ camera.model }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- IP Column -->
+        <ng-container matColumnDef="ipAddress">
+          <th mat-header-cell *matHeaderCellDef>IP Address</th>
+          <td mat-cell *matCellDef="let camera">
+            <code>{{ camera.ipAddress }}:{{ camera.port }}</code>
+          </td>
+        </ng-container>
+
+        <!-- Zones Column -->
+        <ng-container matColumnDef="zones">
+          <th mat-header-cell *matHeaderCellDef>Zones</th>
+          <td mat-cell *matCellDef="let camera">
+            <span class="zone-count">{{ camera.zones.length }} zones</span>
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let camera">
+            <span class="status-chip" [class]="getStatusClass(camera.status)">
+              {{ camera.status | titlecase }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let camera">
+            <button mat-icon-button matTooltip="Run Calibration" (click)="runCalibration(camera)">
+              <mat-icon>tune</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Edit" (click)="editCamera(camera)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Delete" color="warn" (click)="deleteCamera(camera)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <div class="loading-container" *ngIf="isLoading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span>Loading cameras...</span>
+    </div>
+  </mat-card>
+</div>
+
+

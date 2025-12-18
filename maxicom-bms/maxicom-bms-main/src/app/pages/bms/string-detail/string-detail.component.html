@@ -1,0 +1,370 @@
+<div class="page-container">
+  <a (click)="goBack()" class="back-link">
+    <mat-icon>arrow_back</mat-icon>
+    Back to list
+  </a>
+
+  <div *ngIf="isLoading; else content" class="loading-spinner">
+    <mat-spinner></mat-spinner>
+    <p>Loading String...</p>
+  </div>
+
+  <ng-template #content>
+    <mat-card class="header-card mat-elevation-z4">
+      <!-- Active Schedule Banner -->
+      <div *ngIf="activeSchedule" class="active-schedule-banner">
+        <div class="banner-content">
+          <mat-icon class="banner-icon">schedule</mat-icon>
+          <div class="banner-text">
+            <strong>Active discharge cycle:</strong>
+            {{ formatDateTime(activeSchedule.startTime) }} - {{ formatDateTime(activeSchedule.endTime) }}
+            | Discharge Current: {{ activeSchedule.ratedCurrent }}A
+          </div>
+          <button mat-raised-button color="warn" (click)="stopSchedule(activeSchedule!)">
+            <mat-icon>stop</mat-icon>
+            Stop
+          </button>
+        </div>
+      </div>
+
+      <div class="header-content-wrapper">
+        <div class="header-info">
+          <div class="info-item">
+            <span class="info-label">Site Name</span>
+            <span class="info-value">{{ siteName || '...' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">String</span>
+            <span class="info-value">{{ liveHeaderData.stringName || '...' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Cell Qty</span>
+            <span class="info-value">{{ liveHeaderData.cellQty || '...' }}</span>
+          </div>
+          <div class="info-item" *ngIf="liveHeaderData.cellBrand || stringConfig?.cellBrand">
+            <span class="info-label">Cell Brand</span>
+            <span class="info-value">{{ liveHeaderData.cellBrand || stringConfig?.cellBrand || '...' }}</span>
+          </div>
+          <div class="info-item" *ngIf="liveHeaderData.cellModel || stringConfig?.cellModel">
+            <span class="info-label">Cell Model</span>
+            <span class="info-value">{{ liveHeaderData.cellModel || stringConfig?.cellModel || '...' }}</span>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button mat-stroked-button color="primary" (click)="openScheduleDialog()">
+            <mat-icon>schedule</mat-icon>
+            Schedule
+          </button>
+          <button mat-stroked-button color="primary" (click)="exportData()">
+            <mat-icon>download</mat-icon>
+            Export
+          </button>
+          <button mat-stroked-button (click)="printData()">
+            <mat-icon>print</mat-icon>
+            Print
+          </button>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="table-card mat-elevation-z4">
+      <mat-card-header>
+        <mat-card-title>String Data</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="table-container-horizontal">
+        <table mat-table [dataSource]="stringTableDataSource" class="string-data-table">
+
+          <ng-container matColumnDef="stringVol">
+            <th mat-header-cell *matHeaderCellDef> String Vol (V)</th>
+            <td mat-cell *matCellDef="let el"> {{ el.totalVoltage | number:'1.3-3' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="curr">
+            <th mat-header-cell *matHeaderCellDef> Curr (A)</th>
+            <td mat-cell *matCellDef="let el"> {{ el.stringCurrent | number:'1.3-3' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="maxVolId">
+            <th mat-header-cell *matHeaderCellDef> Max Vol ID</th>
+            <td mat-cell *matCellDef="let el"> {{ el.maxVolId }}</td>
+          </ng-container>
+          <ng-container matColumnDef="minVolId">
+            <th mat-header-cell *matHeaderCellDef> Min Vol ID</th>
+            <td mat-cell *matCellDef="let el"> {{ el.minVolId }}</td>
+          </ng-container>
+          <ng-container matColumnDef="avgVol">
+            <th mat-header-cell *matHeaderCellDef> Avg Vol (V)</th>
+            <td mat-cell *matCellDef="let el"> {{ el.avgVoltage | number:'1.3-3' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="maxRstId">
+            <th mat-header-cell *matHeaderCellDef> Max Rst ID</th>
+            <td mat-cell *matCellDef="let el"> {{ el.maxRstId }}</td>
+          </ng-container>
+          <ng-container matColumnDef="minRstId">
+            <th mat-header-cell *matHeaderCellDef> Min Rst ID</th>
+            <td mat-cell *matCellDef="let el"> {{ el.minRstId }}</td>
+          </ng-container>
+          <ng-container matColumnDef="avgRst">
+            <th mat-header-cell *matHeaderCellDef> Avg Rst (µΩ)</th>
+            <td mat-cell *matCellDef="let el"> {{ el.avgRst | number:'1.0-0' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="maxTempId">
+            <th mat-header-cell *matHeaderCellDef> Max Temp ID</th>
+            <td mat-cell *matCellDef="let el"> {{ el.maxTempId }}</td>
+          </ng-container>
+          <ng-container matColumnDef="minTempId">
+            <th mat-header-cell *matHeaderCellDef> Min Temp ID</th>
+            <td mat-cell *matCellDef="let el"> {{ el.minTempId }}</td>
+          </ng-container>
+          <ng-container matColumnDef="avgTemp">
+            <th mat-header-cell *matHeaderCellDef> Avg Temp (°C)</th>
+            <td mat-cell *matCellDef="let el"> {{ el.avgTemp | number:'1.1-1' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="stringSoC">
+            <th mat-header-cell *matHeaderCellDef> String SoC (%)</th>
+            <td mat-cell *matCellDef="let el"> {{ el.stringSoC | number:'1.0-0' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="stringSoH">
+            <th mat-header-cell *matHeaderCellDef> String SoH (%)</th>
+            <td mat-cell *matCellDef="let el"> {{ el.stringSoH | number:'1.0-0' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="maxVoltageValue">
+            <th mat-header-cell *matHeaderCellDef> Max Vol Val (V)</th>
+            <td mat-cell *matCellDef="let el"> {{ el.maxVoltageValue | number:'1.3-3' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="minVoltageValue">
+            <th mat-header-cell *matHeaderCellDef> Min Vol Val (V)</th>
+            <td mat-cell *matCellDef="let el"> {{ el.minVoltageValue | number:'1.3-3' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="maxRstValue">
+            <th mat-header-cell *matHeaderCellDef> Max Rst Val (Ohm)</th>
+            <td mat-cell *matCellDef="let el"> {{ el.maxRstValue | number:'1.3-3' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="minRstValue">
+            <th mat-header-cell *matHeaderCellDef> Min Rst Val (Ohm)</th>
+            <td mat-cell *matCellDef="let el"> {{ el.minRstValue | number:'1.3-3' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="maxTempValue">
+            <th mat-header-cell *matHeaderCellDef> Max Temp Val (°C)</th>
+            <td mat-cell *matCellDef="let el"> {{ el.maxTempValue | number:'1.1-1' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="minTempValue">
+            <th mat-header-cell *matHeaderCellDef> Min Temp Val (°C)</th>
+            <td mat-cell *matCellDef="let el"> {{ el.minTempValue | number:'1.1-1' }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="stringTableDisplayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: stringTableDisplayedColumns;"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Schedule Table -->
+    <mat-card class="table-card mat-elevation-z4">
+      <mat-card-header>
+        <mat-card-title>Discharge History</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="table-container-horizontal schedule-table-container">
+        <table mat-table [dataSource]="schedules" class="schedule-table">
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let schedule">
+              <span [class]="'status-badge status-' + schedule.status">
+                {{ formatScheduleStatus(schedule.status) }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="startTime">
+            <th mat-header-cell *matHeaderCellDef>Start Time</th>
+            <td mat-cell *matCellDef="let schedule">{{ formatDateTime(schedule.startTime) }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="endTime">
+            <th mat-header-cell *matHeaderCellDef>End Time</th>
+            <td mat-cell *matCellDef="let schedule">{{ formatDateTime(schedule.endTime) }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="ratedCurrent">
+            <th mat-header-cell *matHeaderCellDef>Discharge Current (A)</th>
+            <td mat-cell *matCellDef="let schedule">{{ schedule.ratedCurrent | number:'1.3-3' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="soh">
+            <th mat-header-cell *matHeaderCellDef>SoH (%)</th>
+            <td mat-cell *matCellDef="let schedule">
+              {{
+                (schedule.status === 'stopped' || schedule.status === 'finished') && schedule.soh !== null
+                  ? (schedule.soh | number:'1.1-1')
+                  : '-'
+              }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let schedule" class="schedule-actions-cell">
+              <button
+                *ngIf="canStopSchedule(schedule)"
+                mat-stroked-button
+                color="warn"
+                (click)="stopSchedule(schedule)"
+              >
+                <mat-icon>stop_circle</mat-icon>
+                Stop
+              </button>
+
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="actionsMenu"
+                aria-label="Schedule actions"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+
+              <mat-menu #actionsMenu="matMenu">
+                <button mat-menu-item (click)="openScheduleDialog(schedule)" [disabled]="!canEditSchedule(schedule)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Edit</span>
+                </button>
+                <button mat-menu-item (click)="deleteSchedule(schedule)" [disabled]="!canDeleteSchedule(schedule)">
+                  <mat-icon>delete</mat-icon>
+                  <span>Delete</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedScheduleColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedScheduleColumns;"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-tab-group (selectedTabChange)="onTabChange($event)" animationDuration="0ms">
+
+      <mat-tab label="Vol_Rst">
+        <div class="cell-grid">
+          <mat-card class="table-card mat-elevation-z4">
+            <mat-card-header>
+              <mat-card-title>Cell Data: Vol_Rst ({{ cellDataSource.length }} Cells)</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="cell-data-grid-container">
+              <div class="cell-data-grid">
+                <div *ngFor="let chunk of chunkedCellData" class="cell-data-column">
+                  <div class="cell-data-item-row header">
+                    <span class="cell-id">ID</span>
+                    <span class="cell-val">Voltage (V)</span>
+                    <span class="cell-val">Resistance (µΩ)</span>
+                  </div>
+                  <div *ngFor="let cell of chunk" class="cell-data-item-row">
+                    <span class="cell-id">{{ cell.ID }}</span>
+                    <span class="cell-val">{{ cell.Vol | number:'1.3-3' }}</span>
+                    <span class="cell-val">{{ cell.Rst | number:'1.0-0' }}</span>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="chart-card mat-elevation-z4">
+            <mat-card-header>
+              <mat-card-title>Chart: Voltage (V) vs Resistance (µΩ)</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="chart-container">
+              <canvas baseChart
+                      [data]="volRstChartData"
+                      [options]="volRstChartOptions"
+                      type="bar"></canvas>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="T_IR">
+        <div class="cell-grid">
+          <mat-card class="table-card mat-elevation-z4">
+            <mat-card-header>
+              <mat-card-title>Cell Data: Tenp_IR ({{ cellDataSource.length }} Cells)</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="cell-data-grid-container">
+              <div class="cell-data-grid">
+                <div *ngFor="let chunk of chunkedCellData" class="cell-data-column">
+                  <div class="cell-data-item-row header">
+                    <span class="cell-id">ID</span>
+                    <span class="cell-val">Temperature (°C)</span>
+                    <span class="cell-val">IR (U)</span>
+                  </div>
+                  <div *ngFor="let cell of chunk" class="cell-data-item-row">
+                    <span class="cell-id">{{ cell.ID }}</span>
+                    <span class="cell-val">{{ cell.Temp | number:'1.1-1' }}</span>
+                    <span class="cell-val">{{ cell.IR | number:'1.3-3' }}</span>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="chart-card mat-elevation-z4">
+            <mat-card-header>
+              <mat-card-title>Chart: Temperature (°C) vs IR (U)</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="chart-container">
+              <canvas baseChart
+                      [data]="tempIrChartData"
+                      [options]="tempIrChartOptions"
+                      type="bar"></canvas>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="SoC_SoH">
+        <div class="cell-grid">
+          <mat-card class="table-card mat-elevation-z4">
+            <mat-card-header>
+              <mat-card-title>Cell Data: SoC_SoH ({{ cellDataSource.length }} Cells)</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="cell-data-grid-container">
+              <div class="cell-data-grid">
+                <div *ngFor="let chunk of chunkedCellData" class="cell-data-column">
+                  <div class="cell-data-item-row header">
+                    <span class="cell-id">ID</span>
+                    <span class="cell-val">SoC (%)</span>
+                    <span class="cell-val">SoH (%)</span>
+                  </div>
+                  <div *ngFor="let cell of chunk" class="cell-data-item-row">
+                    <span class="cell-id">{{ cell.ID }}</span>
+                    <span class="cell-val">{{ cell.SoC | number:'1.0-0' }}</span>
+                    <span class="cell-val">
+                      {{ cell.SoH | number:'1.0-0' }}
+                      <mat-icon 
+                        *ngIf="isLowSoh(cell.SoH)" 
+                        class="soh-warning-icon"
+                        matTooltip="SoH below 80%"
+                        [style.color]="'#f44336'">
+                        warning
+                      </mat-icon>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="chart-card mat-elevation-z4">
+            <mat-card-header>
+              <mat-card-title>Chart: SoC (%) vs SoH (%)</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="chart-container">
+              <canvas baseChart
+                      [data]="socSohChartData"
+                      [options]="socSohChartOptions"
+                      type="bar"></canvas>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </ng-template>
+</div>

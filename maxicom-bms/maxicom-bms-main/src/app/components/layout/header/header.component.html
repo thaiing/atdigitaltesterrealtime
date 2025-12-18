@@ -1,0 +1,25 @@
+<mat-toolbar color="primary" class="main-header mat-elevation-z4">
+  <div class="header-left">
+    <button mat-icon-button (click)="onMenuClick()" class="menu-button">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="app-title">Battery Monitoring System</span>
+  </div>
+
+  <div class="header-center" *ngIf="totalLowSohCells > 0">
+    <span class="soh-warning-badge">
+      <mat-icon>warning</mat-icon>
+      <span>Warning: {{ totalLowSohCells }} cell(s) have SoH below 80%</span>
+    </span>
+  </div>
+
+  <div class="header-right">
+    <span class="current-time">
+      {{ currentTime | date: 'medium' }}
+    </span>
+
+    <button mat-icon-button (click)="logout()" matTooltip="Logout">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>

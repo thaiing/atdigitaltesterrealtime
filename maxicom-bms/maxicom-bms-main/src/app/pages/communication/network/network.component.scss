@@ -1,0 +1,113 @@
+// src/app/pages/communication/network/network.component.scss
+
+.network-container {
+  min-height: calc(100vh - var(--header-height) - 48px);
+  animation: fadeIn 0.5s ease-in;
+}
+
+.page-header {
+  margin-bottom: 24px;
+
+  .header-content {
+    .page-title {
+      margin: 0 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--primary-color);
+      font-size: 1.8rem;
+      font-weight: 500;
+
+      .title-icon {
+        font-size: 2rem;
+        color: var(--accent-color);
+      }
+    }
+
+    .page-subtitle {
+      margin: 0;
+      color: #666;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  gap: 16px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+// Hiển thị các card trên 1 lưới
+.content-grid {
+  display: grid;
+  // 2 cột trên desktop, 1 cột trên mobile
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+}
+
+.config-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+  mat-card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 20px 24px;
+    border-bottom: 1px solid #e0e0e0;
+
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--primary-color);
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin: 0;
+    }
+  }
+
+  mat-card-content {
+    padding: 24px;
+  }
+
+  mat-card-actions {
+    padding: 0 24px 24px;
+  }
+}
+
+.config-form {
+  .dhcp-toggle {
+    margin-bottom: 24px;
+
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  .form-row {
+    margin-bottom: 16px;
+
+    .form-field {
+      width: 100%;
+    }
+  }
+}
+
+// Animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

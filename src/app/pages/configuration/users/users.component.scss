@@ -1,0 +1,21 @@
+.page-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;
+  h1 { margin: 0; font-size: 1.75rem; font-weight: 600; }
+}
+.table-card { padding: 0; overflow: hidden; }
+.users-table { width: 100%; th { font-weight: 600; color: var(--text-secondary); background: var(--background-color); } }
+.user-name { display: flex; align-items: center; gap: 8px; mat-icon { color: var(--primary-color); } span { font-weight: 500; } }
+code { font-family: monospace; font-size: 0.85rem; background: var(--background-color); padding: 2px 6px; border-radius: 4px; }
+.role-badge {
+  padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 500;
+  &.role-admin { background: rgba(103, 58, 183, 0.1); color: #673ab7; }
+  &.role-operator { background: rgba(33, 150, 243, 0.1); color: #2196f3; }
+  &.role-viewer { background: rgba(158, 158, 158, 0.1); color: #757575; }
+}
+.status-chip {
+  padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 500;
+  &.enabled { background: rgba(67, 160, 71, 0.1); color: var(--success-color); }
+  &.disabled { background: rgba(0, 0, 0, 0.05); color: var(--text-secondary); }
+}
+
+

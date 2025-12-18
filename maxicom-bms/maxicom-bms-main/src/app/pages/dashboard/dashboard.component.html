@@ -1,0 +1,153 @@
+<div class="page-container">
+
+  <!-- Header: Site Name + String Stats -->
+  <div class="site-header">
+    <div class="site-name-section">
+      <div *ngIf="!isEditingSiteName" class="site-name-display">
+        <mat-icon class="site-icon">home_work</mat-icon>
+        <h1 class="site-name">{{ siteName }}</h1>
+        <button mat-icon-button (click)="startEditSiteName()" matTooltip="Rename Site">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+      <div *ngIf="isEditingSiteName" class="site-name-edit">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input matInput [formControl]="siteNameControl" (keydown.enter)="saveSiteName()" placeholder="Site name" />
+        </mat-form-field>
+        <button mat-icon-button color="primary" (click)="saveSiteName()"><mat-icon>check</mat-icon></button>
+        <button mat-icon-button (click)="cancelEditSiteName()"><mat-icon>close</mat-icon></button>
+      </div>
+    </div>
+
+    <div class="string-stats" *ngIf="!isLoadingInfo && stringCellInfo.length > 0">
+      <div *ngFor="let info of stringCellInfo" class="string-stat-item">
+        <mat-icon class="stat-icon">battery_charging_full</mat-icon>
+        <span class="stat-name">{{ info.stringName }}</span>
+        <span class="stat-cells">{{ info.totalCells }} cells</span>
+        <span class="stat-warning" *ngIf="info.lowSohCells > 0">
+          <mat-icon>warning</mat-icon>{{ info.lowSohCells }} &lt;80%
+        </span>
+        <span class="stat-ok" *ngIf="info.lowSohCells === 0">
+          <mat-icon>check_circle</mat-icon>OK
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Thermal Camera Section -->
+  <div class="thermal-section">
+    <div class="thermal-header">
+      <mat-icon class="thermal-icon">thermostat</mat-icon>
+      <h3 class="thermal-title">Thermal Camera</h3>
+      <button mat-icon-button class="camera-toggle" [class.active]="isCameraEnabled" (click)="toggleCamera()"
+        [matTooltip]="isCameraEnabled ? 'Close Camera' : 'Open Camera'">
+        <mat-icon>{{ isCameraEnabled ? 'videocam_off' : 'videocam' }}</mat-icon>
+      </button>
+    </div>
+
+    <div *ngIf="isLoadingThermalCamera" class="loading-thermal">
+      <mat-progress-spinner mode="indeterminate" diameter="24"></mat-progress-spinner>
+      <span>Loading zones...</span>
+    </div>
+
+    <div class="zones-grid" *ngIf="!isLoadingThermalCamera && thermalZones && thermalZones.length > 0">
+      <div *ngFor="let zone of thermalZones" class="zone-card" [class.inactive]="zone.avg_c === 0">
+        <div class="zone-name">{{ zone.zone_name }}</div>
+        <div class="zone-temps">
+          <div class="temp-item avg">
+            <span class="temp-label">AVG</span>
+            <span class="temp-value">{{ zone.avg_c | number:'1.1-1' }}°C</span>
+          </div>
+          <div class="temp-item min">
+            <span class="temp-label">MIN</span>
+            <span class="temp-value">{{ zone.min_c | number:'1.1-1' }}°</span>
+          </div>
+          <div class="temp-item max">
+            <span class="temp-label">MAX</span>
+            <span class="temp-value" [class.warning]="zone.max_c > 40">{{ zone.max_c | number:'1.1-1' }}°</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="no-data" *ngIf="!isLoadingThermalCamera && (!thermalZones || thermalZones.length === 0)">
+      <mat-icon>info</mat-icon>
+      <span>No thermal data available</span>
+    </div>
+  </div>
+
+  <!-- Camera Modal/Popup -->
+  <div class="camera-modal-overlay" *ngIf="isCameraEnabled" (click)="toggleCamera()">
+    <div class="camera-modal" (click)="$event.stopPropagation()">
+      <div class="camera-modal-header">
+        <mat-icon>videocam</mat-icon>
+        <span>Live Camera Stream</span>
+        <button mat-icon-button (click)="toggleCamera()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="camera-modal-body">
+        <iframe [src]="cameraStreamUrl" class="camera-iframe" #cameraWrapper allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- String Table -->
+  <div class="table-container mat-elevation-z2">
+    <div *ngIf="isLoadingData" class="table-loading">
+      <mat-spinner diameter="32"></mat-spinner>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" class="dashboard-table">
+      <ng-container matColumnDef="stringName">
+        <th mat-header-cell *matHeaderCellDef>String Name</th>
+        <td mat-cell *matCellDef="let item" class="table-link">{{ item.stringName }}</td>
+      </ng-container>
+      <ng-container matColumnDef="soC">
+        <th mat-header-cell *matHeaderCellDef>SoC (%)</th>
+        <td mat-cell *matCellDef="let item">{{ item.soC !== null ? (item.soC | number:'1.0-0') : 'N/A' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="soH">
+        <th mat-header-cell *matHeaderCellDef>SoH (%)</th>
+        <td mat-cell *matCellDef="let item">{{ item.soH !== null ? (item.soH | number:'1.0-0') : 'N/A' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="cellVol">
+        <th mat-header-cell *matHeaderCellDef>Cell Vol</th>
+        <td mat-cell *matCellDef="let item">
+          <span [ngClass]="getStatusClass(item.cellVol)"></span>{{ item.cellVol }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="cellRst">
+        <th mat-header-cell *matHeaderCellDef>Cell Rst</th>
+        <td mat-cell *matCellDef="let item">
+          <span [ngClass]="getStatusClass(item.cellRst)"></span>{{ item.cellRst }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="stringVol">
+        <th mat-header-cell *matHeaderCellDef>String Vol</th>
+        <td mat-cell *matCellDef="let item">
+          <span [ngClass]="getStatusClass(item.stringVol)"></span>{{ item.stringVol }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="current">
+        <th mat-header-cell *matHeaderCellDef>Current</th>
+        <td mat-cell *matCellDef="let item">
+          <span [ngClass]="getStatusClass(item.current)"></span>{{ item.current }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="ambient">
+        <th mat-header-cell *matHeaderCellDef>Ambient</th>
+        <td mat-cell *matCellDef="let item">
+          <span [ngClass]="getStatusClass(item.ambient)"></span>{{ item.ambient }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="viewStringDetail(row)"
+        class="dashboard-row-clickable"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" [colSpan]="displayedColumns.length">No monitoring data available.</td>
+      </tr>
+    </table>
+  </div>
+</div>

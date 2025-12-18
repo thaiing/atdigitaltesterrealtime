@@ -1,0 +1,112 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>Alert History</h1>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="filter-card">
+    <div class="filters">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search</mat-label>
+        <input matInput [(ngModel)]="searchText" (keyup)="applyFilter()" placeholder="Search alerts...">
+        <mat-icon matPrefix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Severity</mat-label>
+        <mat-select [(ngModel)]="filterSeverity">
+          <mat-option value="">All</mat-option>
+          <mat-option value="critical">Critical</mat-option>
+          <mat-option value="warning">Warning</mat-option>
+          <mat-option value="info">Info</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <mat-select [(ngModel)]="filterType">
+          <mat-option value="">All</mat-option>
+          <mat-option value="temperature">Temperature</mat-option>
+          <mat-option value="device">Device</mat-option>
+          <mat-option value="system">System</mat-option>
+          <mat-option value="calibration">Calibration</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </mat-card>
+
+  <!-- History Table -->
+  <mat-card class="table-card">
+    <div class="table-container" *ngIf="!isLoading">
+      <table mat-table [dataSource]="dataSource" matSort class="history-table">
+        <!-- Severity Column -->
+        <ng-container matColumnDef="severity">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Severity</th>
+          <td mat-cell *matCellDef="let alert">
+            <div class="severity-badge" [class]="getSeverityClass(alert.severity)">
+              <mat-icon>{{ getSeverityIcon(alert.severity) }}</mat-icon>
+              <span>{{ alert.severity | titlecase }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Title Column -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Alert</th>
+          <td mat-cell *matCellDef="let alert">
+            <div class="alert-info">
+              <span class="alert-title">{{ alert.title }}</span>
+              <span class="alert-type">{{ alert.type | titlecase }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Device Column -->
+        <ng-container matColumnDef="deviceName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Device</th>
+          <td mat-cell *matCellDef="let alert">{{ alert.deviceName }}</td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let alert">
+            <span class="status-chip" [class]="getStatusClass(alert.status)">
+              {{ alert.status | titlecase }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Timestamp Column -->
+        <ng-container matColumnDef="timestamp">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Created</th>
+          <td mat-cell *matCellDef="let alert">{{ formatTime(alert.timestamp) }}</td>
+        </ng-container>
+
+        <!-- Resolved Column -->
+        <ng-container matColumnDef="resolvedAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Resolved</th>
+          <td mat-cell *matCellDef="let alert">
+            <span *ngIf="alert.resolvedAt">{{ formatTime(alert.resolvedAt) }}</span>
+            <span class="text-secondary" *ngIf="!alert.resolvedAt && alert.acknowledgedAt">
+              Acknowledged by {{ alert.acknowledgedBy }}
+            </span>
+            <span class="text-secondary" *ngIf="!alert.resolvedAt && !alert.acknowledgedAt">-</span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+    </div>
+
+    <div class="loading-container" *ngIf="isLoading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span>Loading history...</span>
+    </div>
+  </mat-card>
+</div>
+
+

@@ -1,0 +1,118 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>Active Alerts</h1>
+    <div class="alert-summary">
+      <span class="summary-item critical" *ngIf="criticalCount > 0">
+        <mat-icon>error</mat-icon>
+        {{ criticalCount }} Critical
+      </span>
+      <span class="summary-item warning" *ngIf="warningCount > 0">
+        <mat-icon>warning</mat-icon>
+        {{ warningCount }} Warning
+      </span>
+    </div>
+  </div>
+
+  <mat-card class="alerts-card">
+    <div class="table-container" *ngIf="!isLoading && alerts.length > 0">
+      <table mat-table [dataSource]="alerts" class="alerts-table">
+        <!-- Severity Column -->
+        <ng-container matColumnDef="severity">
+          <th mat-header-cell *matHeaderCellDef>Severity</th>
+          <td mat-cell *matCellDef="let alert">
+            <div class="severity-badge" [class]="getSeverityClass(alert.severity)">
+              <mat-icon>{{ getSeverityIcon(alert.severity) }}</mat-icon>
+              <span>{{ alert.severity | titlecase }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Title Column -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Alert</th>
+          <td mat-cell *matCellDef="let alert">
+            <div class="alert-info">
+              <span class="alert-title">{{ alert.title }}</span>
+              <span class="alert-message">{{ alert.message }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Device Column -->
+        <ng-container matColumnDef="deviceName">
+          <th mat-header-cell *matHeaderCellDef>Device</th>
+          <td mat-cell *matCellDef="let alert">
+            <div class="device-info">
+              <mat-icon class="device-icon">{{ alert.deviceType === 'camera' ? 'videocam' : 'sensors' }}</mat-icon>
+              <span>{{ alert.deviceName }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Value Column -->
+        <ng-container matColumnDef="value">
+          <th mat-header-cell *matHeaderCellDef>Value</th>
+          <td mat-cell *matCellDef="let alert">
+            <span class="temp-value" *ngIf="alert.value">
+              {{ alert.value | number:'1.1-1' }}°C
+              <span class="threshold" *ngIf="alert.threshold">(threshold: {{ alert.threshold }}°C)</span>
+            </span>
+            <span *ngIf="!alert.value">-</span>
+          </td>
+        </ng-container>
+
+        <!-- Timestamp Column -->
+        <ng-container matColumnDef="timestamp">
+          <th mat-header-cell *matHeaderCellDef>Time</th>
+          <td mat-cell *matCellDef="let alert">
+            <div class="time-info">
+              <span class="time-ago">{{ getTimeAgo(alert.timestamp) }}</span>
+              <span class="time-full">{{ formatTime(alert.timestamp) }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let alert">
+            <button 
+              mat-stroked-button 
+              color="primary" 
+              (click)="acknowledgeAlert(alert)"
+              matTooltip="Acknowledge this alert"
+            >
+              <mat-icon>check</mat-icon>
+              Acknowledge
+            </button>
+            <button 
+              mat-stroked-button 
+              (click)="resolveAlert(alert)"
+              matTooltip="Mark as resolved"
+            >
+              <mat-icon>done_all</mat-icon>
+              Resolve
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class]="getSeverityClass(row.severity)"></tr>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoading && alerts.length === 0">
+      <mat-icon>check_circle</mat-icon>
+      <h3>All Clear!</h3>
+      <p>No active alerts at this time.</p>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-container" *ngIf="isLoading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span>Loading alerts...</span>
+    </div>
+  </mat-card>
+</div>
+

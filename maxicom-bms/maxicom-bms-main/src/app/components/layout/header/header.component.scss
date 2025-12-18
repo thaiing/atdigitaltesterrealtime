@@ -1,0 +1,55 @@
+.main-header {
+  display: flex;
+  justify-content: space-between; /* Left - Right */
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #012596;
+  padding: 0 8px; /* add a little space on both sides */
+}
+
+.header-left,
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu-button mat-icon,
+.header-right mat-icon {
+  color: white;
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  .soh-warning-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(244, 67, 54, 0.2);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  font-weight: 500;
+    
+    mat-icon {
+      color: #f44336;
+    }
+  }
+}
+
+.current-time {
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin: 0 16px;
+  // Make sure it's visible on mobile (if needed)
+  @media (max-width: 600px) {
+    display: none; // Hide on mobile for a cleaner look
+  }
+}

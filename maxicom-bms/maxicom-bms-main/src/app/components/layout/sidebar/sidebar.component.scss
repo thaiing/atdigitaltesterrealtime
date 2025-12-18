@@ -1,0 +1,79 @@
+/* src/app/components/layout/sidebar/sidebar.component.scss */
+@use "@angular/material" as mat;
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Căn giữa logo theo chiều ngang */
+  padding: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  height: 63px; /* Khớp với chiều cao toolbar */
+  box-sizing: border-box;
+}
+
+.menu-list {
+  padding-top: 8px;
+}
+
+/* Giao diện chung cho các mục menu */
+a[mat-list-item],
+.mat-expansion-panel-header {
+  color: rgba(0, 0, 0, 0.87);
+
+  mat-icon {
+    color: rgba(0, 0, 0, 0.54);
+  }
+}
+
+/* Sửa khoảng cách icon trong mục Setting (panel header) */
+.menu-expansion-panel .mat-expansion-panel-header mat-icon {
+  margin-right: 32px !important;
+}
+
+
+/* Style cho mục đang active */
+.active-link {
+  background-color: #e8eaf6;
+  color: #00C9C5;
+  font-weight: 500;
+
+  mat-icon {
+    color: #00C9C5;
+
+  }
+}
+
+/* Tùy chỉnh cho mục cha (Setting) */
+.menu-expansion-panel {
+  background: transparent;
+  box-shadow: none;
+
+  .mat-expansion-panel-header {
+    padding: 0 16px;
+
+    /* <<< SỬA LỖI KHOẢNG CÁCH ICON TẠI ĐÂY >>> */
+    .mat-panel-title {
+      display: flex;
+      align-items: center;
+
+      /* Thêm margin-right cho icon bên trong panel title */
+      mat-icon[matListItemIcon] {
+        margin-right: 16px;
+      }
+    }
+  }
+
+  /* Style cho mục con bên trong */
+  .mat-nav-list a[mat-list-item] {
+    padding-left: 32px !important; /* Thụt vào 1 chút */
+
+    mat-icon {
+      margin-right: 16px !important;
+    }
+  }
+
+  /* Bỏ padding của nội dung panel */
+  ::ng-deep .mat-expansion-panel-body {
+    padding: 0 !important;
+  }
+}
