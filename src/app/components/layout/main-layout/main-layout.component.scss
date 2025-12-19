@@ -8,7 +8,6 @@
 .app-wrapper {
   flex: 1;
   margin-top: var(--header-height);
-  /* Push content down by header height */
   height: calc(100vh - var(--header-height));
   position: relative;
 }
@@ -19,21 +18,52 @@
   background-color: var(--background-color);
 }
 
+// =====================
+// SIDEBAR (mat-sidenav)
+// =====================
 .app-sidenav {
-  width: var(--sidebar-width);
+  width: var(--sidebar-width) !important;
+  min-width: var(--sidebar-width) !important;
+  max-width: var(--sidebar-width) !important;
   border-right: 1px solid var(--border-color);
   box-shadow: var(--shadow-md);
+  transition: width 0.3s ease, min-width 0.3s ease, max-width 0.3s ease;
+  overflow: visible !important;
 
   &.collapsed {
-    width: 68px;
+    width: var(--sidebar-collapsed-width) !important;
+    min-width: var(--sidebar-collapsed-width) !important;
+    max-width: var(--sidebar-collapsed-width) !important;
   }
 }
 
+// Override Angular Material sidenav internal styles
+::ng-deep {
+  .mat-drawer.app-sidenav {
+    width: var(--sidebar-width);
+
+    &.collapsed {
+      width: var(--sidebar-collapsed-width);
+    }
+
+    .mat-drawer-inner-container {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+// =====================
+// MAIN CONTENT AREA
+// =====================
 .app-sidenav-content {
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  transition: margin-left 0.3s ease;
+  // Angular Material handles the margin automatically when sidenav is side mode
 }
 
 .main-content {
@@ -41,4 +71,19 @@
   overflow-y: auto;
   padding: 24px;
   background-color: var(--background-color);
+}
+
+// =====================
+// RESPONSIVE
+// =====================
+@media (max-width: 768px) {
+  .main-content {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 12px;
+  }
 }

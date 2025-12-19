@@ -21,37 +21,24 @@
     <!-- Map Canvas -->
     <mat-card class="map-card">
       <div class="map-canvas">
-        <!-- Background grid -->
-        <div class="map-grid"></div>
-        
-        <!-- Substation outline (placeholder) -->
-        <div class="substation-layout">
-          <div class="area area-transformers">
-            <span class="area-label">Transformers</span>
-          </div>
-          <div class="area area-switchgear">
-            <span class="area-label">Switchgear</span>
-          </div>
-          <div class="area area-cables">
-            <span class="area-label">Cable Tunnel</span>
-          </div>
-          <div class="area area-control">
-            <span class="area-label">Control Room</span>
-          </div>
-        </div>
+        <img src="assets/images/emap/schematic.jpg" alt="Substation Schematic" class="schematic-bg">
 
         <!-- Device markers -->
-        <div 
-          *ngFor="let device of devices"
-          class="device-marker"
-          [class]="getStatusClass(device.status)"
-          [class.selected]="selectedDevice?.id === device.id"
-          [style.left]="getDevicePosition(device).left"
-          [style.top]="getDevicePosition(device).top"
-          (click)="selectDevice(device)"
-          [matTooltip]="device.name"
-        >
-          <mat-icon>{{ getDeviceIcon(device.type) }}</mat-icon>
+        <div *ngFor="let device of devices" class="device-marker-container"
+          [style.left]="getDevicePosition(device).left" [style.top]="getDevicePosition(device).top"
+          (click)="selectDevice(device)" [matTooltip]="device.name">
+          <!-- FOV Cone (for cameras) -->
+          <img *ngIf="device.type === 'camera'" src="assets/images/emap/camera-fov.jpg" class="fov-cone"
+            [style.transform]="'rotate(' + (device.rotation || 0) + 'deg)'"
+            [class.selected]="selectedDevice?.id === device.id">
+
+          <!-- Device Icon -->
+          <div class="marker-icon" [class]="getStatusClass(device.status)">
+            <img *ngIf="device.type === 'camera'" src="assets/images/emap/camera-icon.jpg" class="camera-icon-img">
+            <mat-icon *ngIf="device.type !== 'camera'">{{ getDeviceIcon(device.type) }}</mat-icon>
+          </div>
+
+          <!-- Temperature Label -->
           <span class="temp-label" *ngIf="device.temperature">
             {{ device.temperature | number:'1.0-0' }}°
           </span>
@@ -106,12 +93,8 @@
       </mat-card-header>
       <mat-card-content>
         <div class="device-list">
-          <div 
-            *ngFor="let device of devices"
-            class="device-list-item"
-            [class.selected]="selectedDevice?.id === device.id"
-            (click)="selectDevice(device)"
-          >
+          <div *ngFor="let device of devices" class="device-list-item"
+            [class.selected]="selectedDevice?.id === device.id" (click)="selectDevice(device)">
             <mat-icon [class]="getStatusClass(device.status)">{{ getDeviceIcon(device.type) }}</mat-icon>
             <div class="device-info">
               <span class="device-name">{{ device.name }}</span>
@@ -124,5 +107,3 @@
     </mat-card>
   </div>
 </div>
-
-

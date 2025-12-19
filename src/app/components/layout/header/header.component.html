@@ -4,17 +4,8 @@
       <mat-icon>menu</mat-icon>
     </button>
 
-    <!-- Back Button -->
-    <button *ngIf="canGoBack" mat-icon-button (click)="goBack()" class="back-button" matTooltip="Quay lại">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-
     <div class="header-title-container">
       <span class="header-title">ATDigital Tester Real-time</span>
-      <span class="page-title" *ngIf="currentPageTitle">
-        <mat-icon class="breadcrumb-arrow">chevron_right</mat-icon>
-        {{ currentPageTitle }}
-      </span>
     </div>
   </div>
 

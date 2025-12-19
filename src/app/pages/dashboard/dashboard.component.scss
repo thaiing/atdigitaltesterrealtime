@@ -16,14 +16,19 @@
   }
 }
 
-// Summary Cards
+// Summary Cards - 4 equal columns on desktop
 .summary-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
   margin-bottom: 24px;
 
-  @media (max-width: 480px) {
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  @media (max-width: 600px) {
     grid-template-columns: 1fr;
     gap: 12px;
   }

@@ -19,6 +19,7 @@ interface MapDevice {
   type: 'camera' | 'sensor';
   status: 'connected' | 'alert' | 'disconnected';
   position: { x: number; y: number };
+  rotation?: number; // Rotation in degrees
   temperature?: number;
 }
 
@@ -43,9 +44,12 @@ export class EMapComponent implements OnInit, OnDestroy {
   cameras: ThermalCamera[] = [];
   sensors: TemperatureSensor[] = [];
 
-  // Map dimensions
-  mapWidth = 800;
-  mapHeight = 600;
+  // Map dimensions (schematic image ratio)
+  // The original image seems to be landscape. 
+  // We'll use percentage-based positioning, so absolute dimensions matter less 
+  // but help with initial aspect ratio if needed.
+  mapWidth = 1000;
+  mapHeight = 700;
 
   private subscriptions: Subscription[] = [];
   private cameraService = inject(ThermalCameraService);
@@ -76,16 +80,34 @@ export class EMapComponent implements OnInit, OnDestroy {
   }
 
   private updateDeviceList(): void {
+    // Defines manual positions to match the "uploaded_image_3" reference
+    // Since we don't have real coordinates from backend matching this specific image yet.
+    const demoConfig: { [key: string]: { x: number; y: number; rotation: number } } = {
+      'cam-01': { x: 28, y: 30, rotation: 10 },    // T1 Transformer (Left)
+      'cam-02': { x: 28, y: 65, rotation: -10 },   // T2 Transformer (Left)
+      'cam-03': { x: 92, y: 20, rotation: 170 },   // Top Right
+      'cam-04': { x: 92, y: 80, rotation: 190 },   // Bottom Right
+      'cam-05': { x: 65, y: 45, rotation: 180 },   // Center Right
+      'cam-06': { x: 65, y: 55, rotation: 180 },   // Center Right
+    };
+
     const cameraDevices: MapDevice[] = this.cameras
-      .filter((c) => c.location)
-      .map((camera) => ({
-        id: camera.id,
-        name: camera.name,
-        type: 'camera' as const,
-        status: camera.status,
-        position: camera.location!,
-        temperature: camera.zones[0]?.currentTemperature?.avgTemp,
-      }));
+      .map((camera, index) => {
+        // Fallback or override positions for demo purposes to match the schematic
+        // We simulate ID matching if real IDs aren't established, or just map by index
+        const configKey = Object.keys(demoConfig)[index % Object.keys(demoConfig).length];
+        const config = demoConfig[configKey];
+
+        return {
+          id: camera.id,
+          name: camera.name,
+          type: 'camera' as const,
+          status: camera.status,
+          position: config ? { x: config.x, y: config.y } : (camera.location || { x: 50, y: 50 }),
+          rotation: config ? config.rotation : 0,
+          temperature: camera.zones[0]?.currentTemperature?.avgTemp,
+        };
+      });
 
     const sensorDevices: MapDevice[] = this.sensors
       .filter((s) => s.position)
@@ -123,11 +145,10 @@ export class EMapComponent implements OnInit, OnDestroy {
   }
 
   getDevicePosition(device: MapDevice): { left: string; top: string } {
-    const left = (device.position.x / this.mapWidth) * 100;
-    const top = (device.position.y / this.mapHeight) * 100;
+    // Positions are now stored as percentages (0-100) in the demo config
     return {
-      left: `${left}%`,
-      top: `${top}%`,
+      left: `${device.position.x}%`,
+      top: `${device.position.y}%`,
     };
   }
 }
